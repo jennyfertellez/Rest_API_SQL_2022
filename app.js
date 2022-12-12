@@ -3,14 +3,14 @@
 //Load Modules
 const express = require('express');
 const morgan = require('morgan');
-const { Sequelize } = require('sequelize');
+const { sequelize } = require('./models');
 
 //Sequelize autheticate to test the databade connection
 console.log("Testing the connection to the database...");
 
 (async () => {
-  await Sequelize.sync();
-  
+  await sequelize.sync();
+
   try {
     //Test the connection to the database
     await sequelize.autheticate();

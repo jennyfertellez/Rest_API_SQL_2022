@@ -1,6 +1,6 @@
 'use strict';
-const Sequelize = require('sequelize');
-const bcrypt = require('bcrypt');
+const { Model } = require('sequelize');
+const bcrypt = require('bcryptjs');
 
 //Users Table
 module.exports = (sequelize, DataTypes) => {
@@ -32,7 +32,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         emailAddress: {
             type: DataTypes.STRING,
-            allowNull: false;
+            allowNull: false,
             validate: {
                 notNull: {
                     msg: "An Email Is Required."
@@ -48,7 +48,7 @@ module.exports = (sequelize, DataTypes) => {
             validate: {
                 notNull: {
                     msg: "A Password Is Required."
-                };
+                },
             notEmpty: {
                 msg: "Please Provide A Valid Password."
             },
@@ -60,7 +60,13 @@ module.exports = (sequelize, DataTypes) => {
     } }, { sequelize });
 
     User.associate = (models) => {
-        User.hasMany(models.Courses);
+        User.hasMany(models.Courses, {
+            as: 'user',
+            foreignKey: {
+                fieldName: 'userId',
+                allowNull: false,
+            },
+        });
     };
 
     return User;
