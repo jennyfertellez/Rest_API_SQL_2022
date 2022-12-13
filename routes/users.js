@@ -32,7 +32,7 @@ router.post('/users', async(req, res) => {
         .end();
 
     } catch (error) {
-        if (error.name === 'SequelizeValidationError') {
+        if (error.name === 'SequelizeValidationError' || error.name === 'SequelizeUniqueConstraintError') {
             const errors = error.errors.map(err => err.message);
             res.status(400).json({ errors });
         } else {
