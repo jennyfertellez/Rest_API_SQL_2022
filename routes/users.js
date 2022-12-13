@@ -10,9 +10,6 @@ const { authenticateUser} = require('../middleware/auth-user');
 //Importing User Model
 const User = require('../models').User
 
-//Importing Middleware for Handler & Authentication
-
-
 //User Routes
 //An Authenticated Route for All Properties and Values for the Authenticated User
 router.get('/users', authenticateUser, asyncHandler(async(req, res) => {
