@@ -30,10 +30,10 @@ module.exports = (sequelize, DataTypes) => {
             }
         },
         estimatedTime: {
-            type: DataTypes.STRING
+            type: DataTypes.STRING,
         },
         materialsNeeded: {
-            type: DataTypes.STRING
+            type: DataTypes.STRING,
         }
     }, { sequelize });
 

@@ -20,8 +20,6 @@ console.log("Testing the connection to the database...");
   }
 })();
 
-
-
 //Variable to enable global error logging
 const enableGlobalErrorLogging = process.env.ENABLE_GLOBAL_ERROR_LOGGING === 'true';
 
