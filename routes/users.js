@@ -3,6 +3,10 @@
 const express = require('express');
 const router = express.Router();
 
+//Importing Middleware
+const { asyncHandler } = require('../middleware/async-handler');
+const { authenticateUser} = require('../middleware/auth-user');
+
 //Importing User Model
 const User = require('../models').User
 
@@ -11,7 +15,7 @@ const User = require('../models').User
 
 //User Routes
 //An Authenticated Route for All Properties and Values for the Authenticated User
-router.get('/users', (req, res) => {
+router.get('/users', authenticateUser, asyncHandler(async(req, res) => {
     //Get the user from the request body.
     const user = req.currentUser;
     res.json({
@@ -20,15 +24,13 @@ router.get('/users', (req, res) => {
         firstName: user.firstName,
         lastName: user.lastName,
     });
-});
-
-// Set the status to 201 Created and end the response 
-res.status(201).end();
+}));
 
 //Route that Creates A New User
 router.post('/users', async(req, res) => {
     try {
-        ...
+        res.status(201).end();
+
     } catch (error) {
         if (error.name === 'SequelizeValidationError') {
             const errors = error.errors.map(err => err.message);
@@ -37,4 +39,4 @@ router.post('/users', async(req, res) => {
             throw error;
         }
     }
-}));
+});
