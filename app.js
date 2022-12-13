@@ -4,6 +4,8 @@
 const express = require('express');
 const morgan = require('morgan');
 const { sequelize } = require('./models');
+const users = require('./routes/users');
+const courses = require('./routes/courses');
 
 //Sequelize autheticate to test the databade connection
 console.log("Testing the connection to the database...");
@@ -26,6 +28,9 @@ const enableGlobalErrorLogging = process.env.ENABLE_GLOBAL_ERROR_LOGGING === 'tr
 //Create the Express app
 const app = express();
 
+//For Parsing Application/json
+app.use(express.json());
+
 //Setup morgan which gives us http request logging
 app.use(morgan('dev'));
 
@@ -35,6 +40,10 @@ app.get('/', (req, res) => {
     message: 'Welcome to the REST API project!',
   });
 });
+
+//Routes for Users and Courses
+app.use('/api', users);
+app.use('/api', courses);
 
 //Send 404 if no other route matched
 app.use((req, res) => {
