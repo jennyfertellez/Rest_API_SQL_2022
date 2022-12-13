@@ -29,7 +29,10 @@ router.get('/users', authenticateUser, asyncHandler(async(req, res) => {
 //Route that Creates A New User
 router.post('/users', async(req, res) => {
     try {
-        res.status(201).end();
+        const user = await User.create(req.body);
+        res.status(201)
+        .location('/')
+        .end();
 
     } catch (error) {
         if (error.name === 'SequelizeValidationError') {
@@ -40,3 +43,5 @@ router.post('/users', async(req, res) => {
         }
     }
 });
+
+module.exports = router;
