@@ -3,7 +3,6 @@
 const auth = require('basic-auth');
 const { User } = require('../models');
 const bcrypt = require('bcrypt');
-const e = require('express');
 
 //Middleware to authenticate teh request using Basic Authorization
 exports.authenticateUser = async (req, res, next) => {
@@ -17,7 +16,7 @@ exports.authenticateUser = async (req, res, next) => {
         const user = await User.findOne({ where: {emailAddress: credentials.name} });
     //If a user was successfully retrived from the data store
         if (user) {
-            const authenticate = bcrypt.compareSync(credentials.pass, user.password);
+            const authenticated = bcrypt.compareSync(credentials.pass, user.password);
         
     //If the password match
             if (authenticated) {
