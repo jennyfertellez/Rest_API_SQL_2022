@@ -19,6 +19,7 @@ router.get('/courses', asyncHandler(async(req, res) => {
             'description',
             'estimatedTime',
             'materialsNeeded',
+            'userId',
         ],
         include: [
             {
@@ -36,7 +37,7 @@ router.get('/courses', asyncHandler(async(req, res) => {
 }));
 
 //Route that returns the corresponding course and return a 200 HTTP status code
-router.get('/courses', authenticateUser, async(req, res) => {
+router.get('/courses/:id', asyncHandler(async(req, res) => {
     const course = await Course.findByPk(req.params.id, {
         attributes: [
             'id',
@@ -44,6 +45,7 @@ router.get('/courses', authenticateUser, async(req, res) => {
             'description',
             'estimatedTime',
             'materialsNeeded',
+            'userId'
         ],
         included: [
             {
@@ -59,10 +61,10 @@ router.get('/courses', authenticateUser, async(req, res) => {
         ]
     });
     res.json(course);
-});
+}));
 
 //Route that will create a new course and return a 201 HTTP status code
-router.post('/courses', authenticateUser, async(req, res) => {
+router.post('/courses', authenticateUser, asyncHandler(async(req, res) => {
     try { 
         const user = req.currentUser;
 
@@ -79,15 +81,15 @@ router.post('/courses', authenticateUser, async(req, res) => {
         .end();
     } catch (error) {
         if(error.name === 'SequelizeValidationError' || error.name === 'SequelizeUniqueConstraintError') {
-            const errors = error.errorr.map(err => err.message);
+            const errors = error.errors.map(err => err.message);
             res.status(400).json({ errors });
         } else {
             throw error;
         }
-    }});
+    }}));
 
 //Route that will update the corresponding course and return a 204 status code
-router.put('/courses/:id', authenticateUser, async(req, res) => {
+router.put('/courses/:id', authenticateUser, asyncHandler(async(req, res) => {
     try {
         const user = req.currentUser;
         const course = await Course.findByPk(req.params.id);
@@ -107,10 +109,10 @@ router.put('/courses/:id', authenticateUser, async(req, res) => {
             throw error;
         }
     }
-});
+}));
 
 //Route that will delete the corresponding course and a return a 204 HTTP status code
-router.delete('courses/:id', authenticateUser, async(req, res) => {
+router.delete('/courses/:id', authenticateUser, asyncHandler(async(req, res) => {
     const user = req.currentUser;
     const course = await Course.findByPk(req.params.id);
 
@@ -123,6 +125,6 @@ router.delete('courses/:id', authenticateUser, async(req, res) => {
         .json({message: `Forbidden: ${course.title} can only be deleted by the course owner.`})
         .end()
     }
-});
+}));
 
 module.exports = router;
